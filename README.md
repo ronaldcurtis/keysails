@@ -1,4 +1,0 @@
-keystone-starter
-================
-
-Keystone starter
