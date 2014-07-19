@@ -1,8 +1,12 @@
 module.exports = (modelBlueprints, controllers) ->
-  _       = require('underscore')
-  check   = require('check-types')
+  _         = require('lodash')
+  typeCheck = require('type-check').typeCheck
 
   addCrud = (srcObject, crudObject) ->
+    if !typeCheck('Object', srcObject)
+      throw Error "addCrud: expected srcObject to be object but got: #{obj}"
+    if !typeCheck('Object', crudObject)
+      throw Error "addCrud: expected crudObject to be object but got: #{obj}"
     _.defaults srcObject, crudObject
 
   restConfig = Config.rest
@@ -19,4 +23,4 @@ module.exports = (modelBlueprints, controllers) ->
 
     # If it does exist, then addCrud methods if they dont exist
     else if (restConfig.enabled && blueprint.rest == undefined) || blueprint.rest
-      addCrud(contollers[controllerName], restConfig.methods)
+      addCrud(controllers[controllerName], restConfig.methods)

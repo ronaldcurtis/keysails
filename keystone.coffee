@@ -56,15 +56,20 @@ deepFreeze = (o) ->
 global.Config = config
 deepFreeze(global.Config)
 
-console.log('model blueprints', modelBlueprints)
-console.log('controllers', controllers)
-console.log('policies', policies)
-console.log('config', config)
+console.log('\n\nmodel blueprints', modelBlueprints)
+console.log('\n\ncontrollers', controllers)
+console.log('\n\npolicies', policies)
+console.log('\n\nconfig', config)
 
 # Add CRUD methods to model controllers
 require('./server/addCrud')(modelBlueprints, controllers)
 
-console.log('controllers after crud', controllers)
+console.log('\n\ncontrollers after crud', controllers)
+
+# Create Policies and Controllers Object
+policiesAndControllers = require('./server/setPolicies')(controllers, policies)
+
+console.log('\n\nPoliciesAndControllers', policiesAndControllers)
 
 # Setup common locals for your templates. The following are required for the
 # bundled templates and layouts. Any runtime locals (that should be set uniquely
