@@ -35,3 +35,6 @@ User.relationship({ ref: 'Post', path: 'author' })
 
 User.defaultColumns = 'name, email, isAdmin'
 User.register()
+
+module.exports =
+  rest: false

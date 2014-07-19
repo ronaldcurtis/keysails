@@ -1,7 +1,6 @@
 keystone = require('keystone')
 Types = keystone.Field.Types
 
-
 Page = new keystone.List 'Page',
   map: name: 'title',
   autokey: path: 'slug', from: 'title', unique: true
@@ -38,4 +37,7 @@ Page.add
 Page.schema.virtual('content.full').get () ->
   return this.content.extended || this.content.brief
 
-Page.register();
+Page.register()
+
+module.exports =
+  rest: true

@@ -26,6 +26,45 @@ keystone.init
 # Load your project's Models
 modelBlueprints = keystone.import('api/models')
 
+controllers = require('include-all')
+  dirname     :  __dirname + '/api/controllers'
+  filter      :  /(.+Controller)\.coffee$/
+  excludeDirs :  /^\.(git|svn)$/
+  optional: true
+
+policies = require('include-all')
+  dirname: __dirname + '/api/policies'
+  filter      :  /(.*)\.coffee$/
+  excludeDirs :  /^\.(git|svn)$/
+  optional: true
+
+config = require('include-all')
+  dirname: __dirname + '/config'
+  filter      :  /(.*)\.coffee$/
+  excludeDirs :  /^\.(git|svn)$/
+  optional: true
+
+deepFreeze = (o) ->
+  Object.freeze(o)
+  for propKey,prop of o
+    prop = o[propKey]
+    if !o.hasOwnProperty(propKey) || !(typeof prop == "object") || Object.isFrozen(prop)
+      continue
+    deepFreeze(prop)
+
+# Make Config Global and freeze it
+global.Config = config
+deepFreeze(global.Config)
+
+console.log('model blueprints', modelBlueprints)
+console.log('controllers', controllers)
+console.log('policies', policies)
+console.log('config', config)
+
+# Add CRUD methods to model controllers
+require('./server/addCrud')(modelBlueprints, controllers)
+
+console.log('controllers after crud', controllers)
 
 # Setup common locals for your templates. The following are required for the
 # bundled templates and layouts. Any runtime locals (that should be set uniquely
