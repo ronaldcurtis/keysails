@@ -25,7 +25,12 @@ keystone.init
 
 # Load your project's Models
 
-keystone.import('api/models')
+modelBlueprints = require('include-all')
+  dirname     :  __dirname + '/api/models'
+  filter      :  /(.*)\.coffee$/
+  excludeDirs :  /^\.(git|svn)$/
+
+require('./server/setModels')(modelBlueprints)
 
 # Setup common locals for your templates. The following are required for the
 # bundled templates and layouts. Any runtime locals (that should be set uniquely
