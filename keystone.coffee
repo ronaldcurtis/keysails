@@ -24,13 +24,8 @@ keystone.init
 	'cookie secret': 'g!9u07f$~,*"T^E}vn5Nfr6Q*/wO^TMf*^O7g>F)[{]nm@A2HW5qa^2`W`d+Lr`)'
 
 # Load your project's Models
+modelBlueprints = keystone.import('api/models')
 
-modelBlueprints = require('include-all')
-  dirname     :  __dirname + '/api/models'
-  filter      :  /(.*)\.coffee$/
-  excludeDirs :  /^\.(git|svn)$/
-
-require('./server/setModels')(modelBlueprints)
 
 # Setup common locals for your templates. The following are required for the
 # bundled templates and layouts. Any runtime locals (that should be set uniquely
@@ -54,4 +49,13 @@ keystone.set 'nav',
 
 # Start Keystone to connect to your database and initialise the web server
 
-keystone.start()
+keystone.start () ->
+	# Page = keystone.list('Page')
+ 
+	# newPage = new Page.model
+	# 	title: 'New Post'
+	 
+	# newPage.save (err,doc) ->
+	# 	console.log('newPage Saved')
+	# 	console.log(Page)
+				
