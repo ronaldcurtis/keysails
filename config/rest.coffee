@@ -9,16 +9,16 @@ module.exports =
   methods:
     create: (req, res) ->
       model = getModelName(req)
-      res.send {msg: "create method triggered!" }
+      res.json {msg: "create method triggered!" }
 
     read: (req, res) ->
       model = getModelName(req)
-      res.send {msg: "read method triggered!" }
+      res.json {msg: "read method triggered!" }
 
     update: (req,res) ->
       model = getModelName(req)
-      res.send {msg: "update method triggered!" }
+      res.json {msg: "update method triggered!" }
 
     delete: (req,res) ->
       model = getModelName(req)
-      res.send {msg: "delete method triggered!" }
+      res.json {msg: "delete method triggered!" }

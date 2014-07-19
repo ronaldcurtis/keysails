@@ -1,5 +1,5 @@
 # Setup Policies
-module.exports = (controllers, policies) ->
+module.exports = (controllers, policies, config) ->
   _                      = require('lodash')
   typeCheck              = require('type-check').typeCheck
   policiesAndControllers = _.cloneDeep(controllers)
@@ -33,11 +33,12 @@ module.exports = (controllers, policies) ->
       if (value.length == 1)
         addPolicies(controller,action,fns)
 
+  # Loop through policy config and apply policies
   if typeCheck('Object', policies)
-    for controller,actions of Config.policies
+    for controller,actions of config.policies
       # Chek if controller exists
       if !policiesAndControllers[controller]
-        throw Error("Config.policies: Controller #{controller} does not exist")
+        throw Error("config.policies: Controller #{controller} does not exist")
 
       #Util to reference policy functions in array
       makePolicyArray = (policyNamesToApply) ->
@@ -46,7 +47,7 @@ module.exports = (controllers, policies) ->
           policyNamesToApply = [policyNamesToApply]
         for policyName in policyNamesToApply
           if !policies[policyName]
-            throw Error("Config.policies: policy #{policyName} does not exist")
+            throw Error("config.policies: policy #{policyName} does not exist")
           policyFns.push policies[policyName]
         return policyFns
 
@@ -56,7 +57,7 @@ module.exports = (controllers, policies) ->
           if action != "*"
             # Check if controller action exists
             if !policiesAndControllers[controller][action]
-              throw Error("Config.policies: Controller action #{controller}.#{action} does not exist")
+              throw Error("config.policies: Controller action #{controller}.#{action} does not exist")
 
             policyFns = makePolicyArray(policyNamesToApply)
             addPolicies(policiesAndControllers[controller], action, policyFns)

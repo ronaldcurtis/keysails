@@ -1,4 +1,4 @@
-module.exports = (modelBlueprints, controllers) ->
+module.exports = (modelBlueprints, controllers, config) ->
   _         = require('lodash')
   typeCheck = require('type-check').typeCheck
 
@@ -9,7 +9,7 @@ module.exports = (modelBlueprints, controllers) ->
       throw Error "addCrud: expected crudObject to be object but got: #{obj}"
     _.defaults srcObject, crudObject
 
-  restConfig = Config.rest
+  restConfig = config.rest
 
   for modelName, blueprint of modelBlueprints
     controllerName = modelName + 'Controller'

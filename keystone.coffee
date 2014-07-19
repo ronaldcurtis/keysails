@@ -23,54 +23,6 @@ keystone.init
 	'user model': 'User'
 	'cookie secret': 'g!9u07f$~,*"T^E}vn5Nfr6Q*/wO^TMf*^O7g>F)[{]nm@A2HW5qa^2`W`d+Lr`)'
 
-# Load your project's Models
-modelBlueprints = keystone.import('api/models')
-
-controllers = require('include-all')
-  dirname     :  __dirname + '/api/controllers'
-  filter      :  /(.+Controller)\.coffee$/
-  excludeDirs :  /^\.(git|svn)$/
-  optional: true
-
-policies = require('include-all')
-  dirname: __dirname + '/api/policies'
-  filter      :  /(.*)\.coffee$/
-  excludeDirs :  /^\.(git|svn)$/
-  optional: true
-
-config = require('include-all')
-  dirname: __dirname + '/config'
-  filter      :  /(.*)\.coffee$/
-  excludeDirs :  /^\.(git|svn)$/
-  optional: true
-
-deepFreeze = (o) ->
-  Object.freeze(o)
-  for propKey,prop of o
-    prop = o[propKey]
-    if !o.hasOwnProperty(propKey) || !(typeof prop == "object") || Object.isFrozen(prop)
-      continue
-    deepFreeze(prop)
-
-# Make Config Global and freeze it
-global.Config = config
-deepFreeze(global.Config)
-
-console.log('\n\nmodel blueprints', modelBlueprints)
-console.log('\n\ncontrollers', controllers)
-console.log('\n\npolicies', policies)
-console.log('\n\nconfig', config)
-
-# Add CRUD methods to model controllers
-require('./server/addCrud')(modelBlueprints, controllers)
-
-console.log('\n\ncontrollers after crud', controllers)
-
-# Create Policies and Controllers Object
-policiesAndControllers = require('./server/setPolicies')(controllers, policies)
-
-console.log('\n\nPoliciesAndControllers', policiesAndControllers)
-
 # Setup common locals for your templates. The following are required for the
 # bundled templates and layouts. Any runtime locals (that should be set uniquely
 # for each request) should be added to ./routes/middleware.js
@@ -81,25 +33,13 @@ keystone.set 'locals',
 	utils: keystone.utils
 	editable: keystone.content.editable
 
-#  Load your project's Routes
-
-keystone.set('routes', require('./routes'))
+#  Load Models, Rest, Policies, and Routes
+keystone.set('routes', require('./server/index'))
 
 # Configure the navigation bar in Keystone's Admin UI
-
 keystone.set 'nav',
 	'users': 'users'
 	'pages': 'pages'
 
 # Start Keystone to connect to your database and initialise the web server
-
-keystone.start () ->
-	# Page = keystone.list('Page')
- 
-	# newPage = new Page.model
-	# 	title: 'New Post'
-	 
-	# newPage.save (err,doc) ->
-	# 	console.log('newPage Saved')
-	# 	console.log(Page)
-				
+keystone.start()

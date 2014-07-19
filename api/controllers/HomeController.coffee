@@ -1,3 +1,4 @@
+keystone = require('keystone')
 module.exports =
   showHome: (req,res) ->
     locals = res.locals

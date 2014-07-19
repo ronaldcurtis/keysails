@@ -3,5 +3,5 @@ module.exports =
   	showHome: 'firstPolicy'
   PageController:
   	'*': 'firstPolicy'
-  	showPage: ['secondPolicy', 'thirdPolicy']
+  	action1: ['firstPolicy', 'secondPolicy']
   	action2: 'thirdPolicy'
