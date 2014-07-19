@@ -1,11 +1,11 @@
 # Set REST Routes if enabled
-exports = module.exports = (data) ->
-	app = data.app
-	restConfig = data.config.rest
-	modelBlueprints = data.modelBlueprints
+module.exports = (data) ->
+	app                    = data.app
+	restConfig             = data.config.rest
+	modelBlueprints        = data.modelBlueprints
 	policiesAndControllers = data.policiesAndControllers
-	prefix = restConfig.prefix || '/api'
-	path = require('path')
+	prefix                 = restConfig.prefix || '/api'
+	path                   = require('path')
 
 	for modelName, Model of modelBlueprints
 		console.log("model.rest", Model.rest)

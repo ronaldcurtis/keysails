@@ -57,3 +57,4 @@ module.exports = (app) ->
   data.app = app
   data.policiesAndControllers = policiesAndControllers
   require('./setRestRoutes.coffee')(data)
+  require('./setRoutes')(data)
