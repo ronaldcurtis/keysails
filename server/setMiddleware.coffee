@@ -7,7 +7,6 @@ module.exports = (data) ->
 		if !typeCheck('Array', middleware.pre.routes)
 			throw Error "config.middleware.pre.routes should be an array"
 		for fn in middleware.pre.routes
-			console.log('preroutes fn', fn)
 			keystone.pre('routes', fn)
 
 	if middleware.pre && middleware.pre.render
