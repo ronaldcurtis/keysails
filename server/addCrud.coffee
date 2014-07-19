@@ -1,6 +1,9 @@
-module.exports = (modelBlueprints, controllers, config) ->
-  _         = require('lodash')
-  typeCheck = require('type-check').typeCheck
+module.exports = (data) ->
+  _               = require('lodash')
+  typeCheck       = require('type-check').typeCheck
+  modelBlueprints = data.modelBlueprints
+  controllers     = data.controllers
+  config          = data.config
 
   addCrud = (srcObject, crudObject) ->
     if !typeCheck('Object', srcObject)

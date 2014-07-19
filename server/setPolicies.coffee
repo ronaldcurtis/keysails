@@ -1,7 +1,10 @@
 # Setup Policies
-module.exports = (controllers, policies, config) ->
+module.exports = (data) ->
   _                      = require('lodash')
   typeCheck              = require('type-check').typeCheck
+  controllers            = data.controllers
+  policies               = data.policies
+  config                 = data.config
   policiesAndControllers = _.cloneDeep(controllers)
 
   # First place all controller actions into an array

@@ -1,6 +1,4 @@
 # Config for automatic REST routes
-getModelName = (req) ->
-  return req.params.model.charAt(0).toUpperCase() + req.params.model.slice(1).toLowerCase()
 
 module.exports =
   enabled: true
@@ -8,17 +6,17 @@ module.exports =
 
   methods:
     create: (req, res) ->
-      model = getModelName(req)
-      res.json {msg: "create method triggered!" }
+      modelName = getModelName(req)
+      res.json {msg: "create method triggered!", modelName: modelName }
 
     read: (req, res) ->
-      model = getModelName(req)
-      res.json {msg: "read method triggered!" }
+      modelName = getModelName(req)
+      res.json {msg: "read method triggered!", modelName: modelName }
 
     update: (req,res) ->
-      model = getModelName(req)
-      res.json {msg: "update method triggered!" }
+      modelName = getModelName(req)
+      res.json {msg: "update method triggered!", modelName: modelName }
 
     delete: (req,res) ->
-      model = getModelName(req)
-      res.json {msg: "delete method triggered!" }
+      modelName = getModelName(req)
+      res.json {msg: "delete method triggered!", modelName: modelName }

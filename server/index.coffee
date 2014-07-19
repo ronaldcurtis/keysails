@@ -31,17 +31,29 @@ deepFreeze = (o) ->
       continue
     deepFreeze(prop)
 
+# Deep Freeze Config
+deepFreeze(config)
+
+# Create Object to pass around
+data = config: config, policies: policies, controllers: controllers, modelBlueprints: modelBlueprints
+
 console.log('\n\nmodel blueprints', modelBlueprints)
 console.log('\n\ncontrollers', controllers)
 console.log('\n\npolicies', policies)
 console.log('\n\nconfig', config)
 
 # Add CRUD methods to model controllers
-require('./addCrud')(modelBlueprints, controllers, config)
+require('./addCrud')(data)
 
 console.log('\n\ncontrollers after crud', controllers)
 
 # Create Policies and Controllers Object
-policiesAndControllers = require('./setPolicies')(controllers, policies, config)
+policiesAndControllers = require('./setPolicies')(data)
 
 console.log('\n\nPoliciesAndControllers', policiesAndControllers)
+
+# Set Rest Routes, and all other routes
+module.exports = (app) ->
+  data.app = app
+  data.policiesAndControllers = policiesAndControllers
+  # require('./setRestRoutes.coffee')(data)
