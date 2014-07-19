@@ -21,9 +21,9 @@ module.exports = (data) ->
     if !controllers[controllerName]
       if (restConfig.enabled && blueprint.rest == undefined) || blueprint.rest
         newController = {}
-        addCrud(newController, restConfig.methods)
+        addCrud(newController, restConfig.returnCrud(modelName))
         controllers[controllerName] = newController
 
     # If it does exist, then addCrud methods if they dont exist
     else if (restConfig.enabled && blueprint.rest == undefined) || blueprint.rest
-      addCrud(controllers[controllerName], restConfig.methods)
+      addCrud(controllers[controllerName], restConfig.returnCrud(modelName))
