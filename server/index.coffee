@@ -35,7 +35,7 @@ policiesAndControllers = require('./setPolicies')(data)
 # Set Middleware
 require('./setMiddleware')(data)
 
-# Set Middleware, Rest Routes, and all other routes
+# Set Rest Routes, and all other routes
 module.exports = (app) ->
   data.app = app
   data.policiesAndControllers = policiesAndControllers
