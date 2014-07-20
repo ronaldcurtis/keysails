@@ -21,7 +21,8 @@
     "uglify-js": "~2.4.15",
     "grunt-shell": "~0.7.0",
     "grunt-contrib-clean": "~0.5.0",
-    "grunt-env": "~0.4.1"
+    "grunt-env": "~0.4.1",
+    "expect.js": "~0.3.1"
   },
   "devDependencies": {},
   "engines": {
