@@ -22,7 +22,8 @@
     "grunt-shell": "~0.7.0",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-env": "~0.4.1",
-    "expect.js": "~0.3.1"
+    "expect.js": "~0.3.1",
+    "sinon": "~1.10.3"
   },
   "devDependencies": {},
   "engines": {
