@@ -10,6 +10,8 @@ module.exports = (data) ->
       throw Error "addCrud: expected srcObject to be object but got: #{obj}"
     if !typeCheck('Object', crudObject)
       throw Error "addCrud: expected crudObject to be object but got: #{obj}"
+    if !typeCheck('{ create: Function, read: Function, update: Function, delete: Function }', crudObject)
+      throw Error "addCrud: expected crudObject to be object with create, read, update properties of type Function"
     _.defaults srcObject, crudObject
 
   restConfig = config.rest

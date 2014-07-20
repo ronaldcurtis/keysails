@@ -147,7 +147,7 @@ describe "addCrud:", ->
 		it "should throw an error if config.rest.crud does not return an object", ->
 			config = 
 				rest:
-					enabled: false
+					enabled: true
 					crud: () ->
 						return []
 
@@ -159,6 +159,155 @@ describe "addCrud:", ->
 
 			expect(addCrud).withArgs(data).to.throwError()
 
+
+		it "should throw an error if config.rest.crud does not return an object with a create method", ->
+			config = 
+				rest:
+					enabled: true
+					crud: () ->
+						obj =
+							read: () ->
+							update: () ->
+							delete: () ->
+
+			data = 
+				config: config
+				modelBlueprints:
+					Page: {}
+				controllers: {}
+
+			expect(addCrud).withArgs(data).to.throwError()
+
+		it "should throw an error if config.rest.crud does not return an object with a read method", ->
+			config = 
+				rest:
+					enabled: true
+					crud: () ->
+						obj =
+							create: () ->
+							update: () ->
+							delete: () ->
+
+			data = 
+				config: config
+				modelBlueprints:
+					Page: {}
+				controllers: {}
+
+			expect(addCrud).withArgs(data).to.throwError()
+
+		it "should throw an error if config.rest.crud does not return an object with an update method", ->
+			config = 
+				rest:
+					enabled: true
+					crud: () ->
+						obj =
+							create: () ->
+							read: () ->
+							delete: () ->
+
+			data = 
+				config: config
+				modelBlueprints:
+					Page: {}
+				controllers: {}
+
+			expect(addCrud).withArgs(data).to.throwError()
+
+		it "should throw an error if config.rest.crud does not return an object with a delete method", ->
+			config = 
+				rest:
+					enabled: true
+					crud: () ->
+						obj =
+							create: () ->
+							read: () ->
+							update: () ->
+
+			data = 
+				config: config
+				modelBlueprints:
+					Page: {}
+				controllers: {}
+
+			expect(addCrud).withArgs(data).to.throwError()
+
+
+		it "should throw an error if config.rest.crud create property is not a function", ->
+			config = 
+				rest:
+					enabled: true
+					crud: () ->
+						obj =
+							create: 'yo'
+							read: () ->
+							update: () ->
+							delete: () ->
+
+			data = 
+				config: config
+				modelBlueprints:
+					Page: {}
+				controllers: {}
+
+			expect(addCrud).withArgs(data).to.throwError()
+
+		it "should throw an error if config.rest.crud read property is not a function", ->
+			config = 
+				rest:
+					enabled: true
+					crud: () ->
+						obj =
+							create: () ->
+							read: ''
+							update: () ->
+							delete: () ->
+
+			data = 
+				config: config
+				modelBlueprints:
+					Page: {}
+				controllers: {}
+
+			expect(addCrud).withArgs(data).to.throwError()
+
+		it "should throw an error if config.rest.crud update property is not a function", ->
+			config = 
+				rest:
+					enabled: true
+					crud: () ->
+						obj =
+							create: () ->
+							read: () ->
+							update: []
+							delete: () ->
+
+			data = 
+				config: config
+				modelBlueprints:
+					Page: {}
+				controllers: {}
+
+			expect(addCrud).withArgs(data).to.throwError()
+
+		it "should throw an error if config.rest.crud delete property is not a function", ->
+			config = 
+				rest:
+					enabled: true
+					crud: () ->
+						obj =
+							create: () ->
+							read: () ->
+							update: () ->
+							delete: ''
+
+			data = 
+				config: config
+				modelBlueprints:
+					Page: {}
+				controllers: {}
+
+			expect(addCrud).withArgs(data).to.throwError()
 
 
 
