@@ -8,11 +8,15 @@ module.exports = (data) ->
   policiesAndControllers = _.cloneDeep(controllers)
 
   # First place all controller actions into an array
+  # And check controllers are correctly defined
   do ->
     for controllerName, controller of policiesAndControllers
+      if !typeCheck('Object', controller)
+        throw Error "#{controllerName} should export an object"
       for actionName, action of controller
-        if !typeCheck('Array', action)
-          policiesAndControllers[controllerName][actionName] = [action]
+        if !typeCheck('Function', action)
+          throw Error "#{controllerName}.#{actionName} should be a function"
+        policiesAndControllers[controllerName][actionName] = [action]
 
   # Adds functions to the front of the controller action
   addPolicies = (controller, action, fns) ->
@@ -43,7 +47,7 @@ module.exports = (data) ->
       if !policiesAndControllers[controller]
         throw Error("config.policies: Controller #{controller} does not exist")
 
-      #Util to reference policy functions in array
+      # Util to reference policy functions in array
       makePolicyArray = (policyNamesToApply) ->
         policyFns = []
         if typeCheck('String', policyNamesToApply)
@@ -51,6 +55,8 @@ module.exports = (data) ->
         for policyName in policyNamesToApply
           if !policies[policyName]
             throw Error("config.policies: policy #{policyName} does not exist")
+          if !typeCheck('Function', policies[policyName])
+            throw Error("policy #{policyName} should export a function, but instead got #{typeof policies[policyName]}")
           policyFns.push policies[policyName]
         return policyFns
 
