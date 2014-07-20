@@ -1,6 +1,8 @@
 _ = require('underscore')
 keystone = require('keystone')
 app = keystone.app
+express = keystone.express
+path = require('path')
 
 initLocals = (req,res,next) ->
 	locals = res.locals
@@ -30,6 +32,8 @@ app.use(mincer.assets())
 # We must precompile our assets before starting in production
 if (process.env.NODE_ENV != 'production')
 	app.use('/assets', mincer.createServer())
+else
+	app.use('/assets', express.static(path.join(__dirname, "../.built")))
 
 module.exports = 
 	preRoutes: [initLocals]

@@ -10,7 +10,7 @@ mincer = new connectMincer
   root: path.join(__dirname, '../')
   production: process.env.NODE_ENV == 'production'
   mountPoint: '/assets'
-  manifestFile: path.join(__dirname, '../.tmp/assets/manifest.json')
+  manifestFile: path.join(__dirname, '../.built/manifest.json')
   paths: ['assets/']
  
 # Configure Stylus so it can import css files just like .styl files
