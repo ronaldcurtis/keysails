@@ -23,17 +23,6 @@ config = includeAll
   excludeDirs : /^\.(git|svn)$/
   optional    : true
 
-deepFreeze = (o) ->
-  Object.freeze(o)
-  for propKey,prop of o
-    prop = o[propKey]
-    if !o.hasOwnProperty(propKey) || !(typeof prop == "object") || Object.isFrozen(prop)
-      continue
-    deepFreeze(prop)
-
-# Deep Freeze Config
-deepFreeze(config)
-
 # Create Object to pass around
 data = config: config, policies: policies, controllers: controllers, modelBlueprints: modelBlueprints
 

@@ -1,4 +1,6 @@
 _ = require('underscore')
+keystone = require('keystone')
+app = keystone.app
 
 initLocals = (req,res,next) ->
 	locals = res.locals
@@ -20,6 +22,14 @@ flashMessages = (req,res,next) ->
 	
 	next()
 
+# Initialize asset pipeline first
+mincer = require('./assets')
+app.use(mincer.assets())
+
+# Connect-mincer serves our assets in dev
+# We must precompile our assets before starting in production
+if (process.env.NODE_ENV != 'production')
+	app.use('/assets', mincer.createServer())
 
 module.exports = 
 	preRoutes: [initLocals]

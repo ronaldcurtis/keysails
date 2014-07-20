@@ -19,8 +19,7 @@ html.no-js
 		title= title || 'keysails'
 		link(rel="shortcut icon", href="/favicon.ico", type="image/x-icon")
 
-		link(href="/styles/site.min.css", rel="stylesheet")
-
+		!= css('css/importer.css')
 		block css
 
 		block head
@@ -32,6 +31,7 @@ html.no-js
 
 		block content
 
-	.container: #footer
+	
 
-	block js
+		block js
+		!= js('js/importer.js')
