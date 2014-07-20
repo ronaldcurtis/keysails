@@ -5,7 +5,7 @@ module.exports =
   enabled: true
   prefix: '/api/v1'
 
-  returnCrud: (modelName) ->
+  crud: (modelName) ->
     crudMethods =
       create: (req, res) ->
         Model = keystone.list(modelName)
