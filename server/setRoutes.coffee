@@ -16,5 +16,4 @@ exports = module.exports = (data) ->
     if !policiesAndControllers[controller] then throw Error("config.routes: Controller #{controller} does not exist")
     if !policiesAndControllers[controller][action] then throw Error("config.routes: Controller action #{controller}.#{action} does not exist")
 
-    pathAndControllerArray = [path].concat(policiesAndControllers[controller][action])
-    app[verb].apply(app, pathAndControllerArray)
+    app[verb](path, policiesAndControllers[controller][action])
