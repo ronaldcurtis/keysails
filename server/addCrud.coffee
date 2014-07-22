@@ -1,3 +1,10 @@
+###*
+ * Function that adds CRUD methods to a model's controller object
+ * @param data Contains information about existing models and config settings for rest
+ * @param data.modelBlueprints contains model config settings for defined models
+ * @param data.controllers contains defined controller objects
+ * @param data.config contains settings pertaining to whether rest is enabled or not
+###
 module.exports = (data) ->
   _               = require('lodash')
   typeCheck       = require('type-check').typeCheck

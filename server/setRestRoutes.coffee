@@ -1,4 +1,12 @@
-# Set REST Routes if enabled
+###*
+ * Function that sets REST routes for Models
+ * @param data Contains information about existing models and config settings for rest
+ * @param data.app points to express application instance
+ * @param data.modelBlueprints contains model config settings for defined models
+ * @param data.policiesAndControllers object containing transformed controllers with any policies attached
+ * @param data.config contains REST configuration and REST prefix
+ * @returns {Object} Transformed controllers object with controller methods in array format
+###
 module.exports = (data) ->
 	app                    = data.app
 	restConfig             = data.config.rest

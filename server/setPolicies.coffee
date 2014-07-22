@@ -1,4 +1,11 @@
-# Setup Policies
+###*
+ * Function that adds and orders any defined policies as specified in config/policies.coffee
+ * @param data Contains information about controllers and policies
+ * @param data.controllers object containing defined controller objects
+ * @param data.policies object containing defined policy functions
+ * @param data.config contains policy configuration for controller actions
+ * @returns {Object} Transformed controllers object with controller methods in array format
+###
 module.exports = (data) ->
   _                      = require('lodash')
   typeCheck              = require('type-check').typeCheck

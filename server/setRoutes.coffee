@@ -1,4 +1,11 @@
-
+###*
+ * Function that sets routes as defined in config/routes.coffee
+ * @param data Contains information about existing models and config settings for rest
+ * @param data.app points to express application instance
+ * @param data.policiesAndControllers object containing transformed controllers with any policies attached
+ * @param data.config contains REST configuration and REST prefix
+ * @param data.routes contains route configuration
+###
 exports = module.exports = (data) ->
   app                    = data.app
   config                 = data.config
