@@ -25,6 +25,7 @@ describe "setRestRoutes:", ->
 			expect(app.put.called).to.be(false)
 			expect(app.delete.called).to.be(false)
 
+
 	describe "When a Model exists and rest is enabled:", ->
 		app =
 			get: sinon.spy()
@@ -61,6 +62,29 @@ describe "setRestRoutes:", ->
 			expect(app.put.args[0][1]).to.be(data.policiesAndControllers.PageController.update)
 			expect(app.delete.args[0][0]).to.be('/api/page/:id')
 			expect(app.delete.args[0][1]).to.be(data.policiesAndControllers.PageController.delete)
+
+		it "should throw an error if controller.read does not exist", ->
+			delete data.policiesAndControllers.PageController.read
+			expect(setRestRoutes).withArgs(data).to.throwError (e) ->
+				expect(e.message).to.contain('PageController.read does not exist')
+
+		it "should throw an error if controller.create does not exist", ->
+			data.policiesAndControllers.PageController.read = () ->
+			delete data.policiesAndControllers.PageController.create
+			expect(setRestRoutes).withArgs(data).to.throwError (e) ->
+				expect(e.message).to.contain('PageController.create does not exist')
+
+		it "should throw an error if controller.update does not exist", ->
+			data.policiesAndControllers.PageController.create = () ->
+			delete data.policiesAndControllers.PageController.update
+			expect(setRestRoutes).withArgs(data).to.throwError (e) ->
+				expect(e.message).to.contain('PageController.update does not exist')
+
+		it "should throw an error if controller.delete does not exist", ->
+			data.policiesAndControllers.PageController.update = () ->
+			delete data.policiesAndControllers.PageController.delete
+			expect(setRestRoutes).withArgs(data).to.throwError (e) ->
+				expect(e.message).to.contain('PageController.delete does not exist')
 
 
 

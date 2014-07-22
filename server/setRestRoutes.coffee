@@ -11,6 +11,10 @@ module.exports = (data) ->
 		if (restConfig.enabled && Model.rest == undefined) || Model.rest
 			controllerName = modelName + 'Controller'
 			controller = policiesAndControllers[controllerName]
+			# If crud method does not exist, then throw error
+			for methodName in ['read', 'create', 'update', 'delete']
+				if !controller[methodName]
+					throw Error "setRestRoutes: crud method #{controllerName}.#{methodName} does not exist"
 			app.get path.join(prefix, "/#{modelName.toLowerCase()}/:id?"), controller.read
 			app.post path.join(prefix, "/#{modelName.toLowerCase()}"), controller.create
 			app.put path.join(prefix, "/#{modelName.toLowerCase()}/:id"), controller.update
