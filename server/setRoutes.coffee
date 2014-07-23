@@ -15,8 +15,8 @@ exports = module.exports = (data) ->
   for key,value of routes
     keyArray = key.trim().split(' ')
     valueArray = value.trim().split('.')
-    verb = keyArray[0]
-    path = keyArray[1]
+    verb = keyArray[0].toLowerCase()
+    path = keyArray[1].toLowerCase()
     controller = valueArray[0]
     action = valueArray[1]
 
