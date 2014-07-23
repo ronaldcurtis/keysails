@@ -1,7 +1,7 @@
 module.exports = (data) ->
 	middleware = data.config.middleware
 	typeCheck = require('type-check').typeCheck
-	keystone = require('keystone')
+	keystone = data.keystone
 
 	if middleware.preRoutes
 		if !typeCheck('Array', middleware.preRoutes)

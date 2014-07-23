@@ -24,7 +24,7 @@ config = includeAll
   optional    : true
 
 # Create Object to pass around
-data = config: config, policies: policies, controllers: controllers, modelBlueprints: modelBlueprints
+data = config: config, policies: policies, controllers: controllers, modelBlueprints: modelBlueprints, keystone: keystone
 
 # Add CRUD methods to model controllers
 require('./addCrud')(data)
