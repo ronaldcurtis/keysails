@@ -47,7 +47,7 @@ describe "setRestRoutes:", ->
 					update: () ->
 					delete: () ->
 
-		it "should add rest routes for that Model", ->
+		it "should add rest routes for that Model with default prefix of /api if no prefix specified", ->
 			setRestRoutes(data)
 			expect(app.get.called).to.be(true)
 			expect(app.post.called).to.be(true)
@@ -62,6 +62,23 @@ describe "setRestRoutes:", ->
 			expect(app.put.args[0][1]).to.be(data.policiesAndControllers.PageController.update)
 			expect(app.delete.args[0][0]).to.be('/api/page/:id')
 			expect(app.delete.args[0][1]).to.be(data.policiesAndControllers.PageController.delete)
+
+		it "should add rest routes for that Model with configured prefix", ->
+			data.config.rest.prefix = '/api/v1'
+			setRestRoutes(data)
+			expect(app.get.called).to.be(true)
+			expect(app.post.called).to.be(true)
+			expect(app.put.called).to.be(true)
+			expect(app.delete.called).to.be(true)
+
+			expect(app.get.args[1][0]).to.be('/api/v1/page/:id?')
+			expect(app.get.args[1][1]).to.be(data.policiesAndControllers.PageController.read)
+			expect(app.post.args[1][0]).to.be('/api/v1/page')
+			expect(app.post.args[1][1]).to.be(data.policiesAndControllers.PageController.create)
+			expect(app.put.args[1][0]).to.be('/api/v1/page/:id')
+			expect(app.put.args[1][1]).to.be(data.policiesAndControllers.PageController.update)
+			expect(app.delete.args[1][0]).to.be('/api/v1/page/:id')
+			expect(app.delete.args[1][1]).to.be(data.policiesAndControllers.PageController.delete)
 
 		it "should throw an error if controller.read does not exist", ->
 			delete data.policiesAndControllers.PageController.read
