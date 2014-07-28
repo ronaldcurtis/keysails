@@ -87,7 +87,7 @@ describe "setPolicies:", ->
 			expect(setPolicies).withArgs(data).to.throwError (e) ->
 				expect(e.message).to.contain('PageController.someAction should be a function')
 
-	describe "When adding policies to controllers", ->
+	describe "When adding policies to controllers:", ->
 
 		it "should add specified policies in front of a controller action", ->
 
@@ -205,6 +205,104 @@ describe "setPolicies:", ->
 			expect(returnedObj.PageController.thirdAction[0]()).to.be('thirdPolicy here!')
 			expect(returnedObj.PageController.thirdAction[1]()).to.be('fourthPolicy here!')
 			expect(returnedObj.PageController.thirdAction[2]()).to.be('thirdAction here!')
+
+	describe "When adding global policies:", ->
+
+		it "should add default policy only to actions without a policy", ->
+			data =
+				config:
+					policies:
+						"*": "firstPolicy"
+						PageController:
+							'*': 'thirdPolicy'
+							secondAction: 'secondPolicy'
+				policies:
+					firstPolicy: () -> return 'firstPolicy here!'
+					secondPolicy: () -> return 'secondPolicy here!'
+					thirdPolicy: () -> return 'thirdPolicy here!'
+				controllers:
+					PageController:
+						firstAction: () -> return 'firstAction here!'
+						secondAction: () -> return 'secondAction here!'
+						thirdAction: () -> return 'thirdAction here!'
+					PostController:
+						firstAction: () -> return 'postController firstAction here'
+						secondAction: () -> return 'postController secondAction here'
+
+			returnedObj = setPolicies(data)
+			expect(returnedObj.PageController.firstAction).to.be.an('array')
+			expect(returnedObj.PageController.firstAction.length).to.be(2)
+			expect(returnedObj.PageController.firstAction[0]()).to.be('thirdPolicy here!')
+			expect(returnedObj.PageController.firstAction[1]()).to.be('firstAction here!')
+
+			expect(returnedObj.PageController.secondAction).to.be.an('array')
+			expect(returnedObj.PageController.secondAction.length).to.be(2)
+			expect(returnedObj.PageController.secondAction[0]()).to.be('secondPolicy here!')
+			expect(returnedObj.PageController.secondAction[1]()).to.be('secondAction here!')
+
+			expect(returnedObj.PageController.thirdAction).to.be.an('array')
+			expect(returnedObj.PageController.thirdAction.length).to.be(2)
+			expect(returnedObj.PageController.thirdAction[0]()).to.be('thirdPolicy here!')
+			expect(returnedObj.PageController.thirdAction[1]()).to.be('thirdAction here!')
+
+			expect(returnedObj.PostController.firstAction).to.be.an('array')
+			expect(returnedObj.PostController.firstAction.length).to.be(2)
+			expect(returnedObj.PostController.firstAction[0]()).to.be('firstPolicy here!')
+			expect(returnedObj.PostController.firstAction[1]()).to.be('postController firstAction here')
+
+			expect(returnedObj.PostController.secondAction).to.be.an('array')
+			expect(returnedObj.PostController.secondAction.length).to.be(2)
+			expect(returnedObj.PostController.secondAction[0]()).to.be('firstPolicy here!')
+			expect(returnedObj.PostController.secondAction[1]()).to.be('postController secondAction here')
+
+		it "should add default policy array only to actions without a policy", ->
+			data =
+				config:
+					policies:
+						"*": ["firstPolicy", "thirdPolicy"]
+						PageController:
+							'*': 'thirdPolicy'
+							secondAction: 'secondPolicy'
+				policies:
+					firstPolicy: () -> return 'firstPolicy here!'
+					secondPolicy: () -> return 'secondPolicy here!'
+					thirdPolicy: () -> return 'thirdPolicy here!'
+				controllers:
+					PageController:
+						firstAction: () -> return 'firstAction here!'
+						secondAction: () -> return 'secondAction here!'
+						thirdAction: () -> return 'thirdAction here!'
+					PostController:
+						firstAction: () -> return 'postController firstAction here'
+						secondAction: () -> return 'postController secondAction here'
+
+			returnedObj = setPolicies(data)
+			expect(returnedObj.PageController.firstAction).to.be.an('array')
+			expect(returnedObj.PageController.firstAction.length).to.be(2)
+			expect(returnedObj.PageController.firstAction[0]()).to.be('thirdPolicy here!')
+			expect(returnedObj.PageController.firstAction[1]()).to.be('firstAction here!')
+
+			expect(returnedObj.PageController.secondAction).to.be.an('array')
+			expect(returnedObj.PageController.secondAction.length).to.be(2)
+			expect(returnedObj.PageController.secondAction[0]()).to.be('secondPolicy here!')
+			expect(returnedObj.PageController.secondAction[1]()).to.be('secondAction here!')
+
+			expect(returnedObj.PageController.thirdAction).to.be.an('array')
+			expect(returnedObj.PageController.thirdAction.length).to.be(2)
+			expect(returnedObj.PageController.thirdAction[0]()).to.be('thirdPolicy here!')
+			expect(returnedObj.PageController.thirdAction[1]()).to.be('thirdAction here!')
+
+			expect(returnedObj.PostController.firstAction).to.be.an('array')
+			expect(returnedObj.PostController.firstAction.length).to.be(3)
+			expect(returnedObj.PostController.firstAction[0]()).to.be('firstPolicy here!')
+			expect(returnedObj.PostController.firstAction[1]()).to.be('thirdPolicy here!')
+			expect(returnedObj.PostController.firstAction[2]()).to.be('postController firstAction here')
+
+			expect(returnedObj.PostController.secondAction).to.be.an('array')
+			expect(returnedObj.PostController.secondAction.length).to.be(3)
+			expect(returnedObj.PostController.secondAction[0]()).to.be('firstPolicy here!')
+			expect(returnedObj.PostController.secondAction[1]()).to.be('thirdPolicy here!')
+			expect(returnedObj.PostController.secondAction[2]()).to.be('postController secondAction here')
 
 
 
