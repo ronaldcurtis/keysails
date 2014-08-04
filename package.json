@@ -2,6 +2,7 @@
   "name": "keysails",
   "version": "0.0.0",
   "private": true,
+  "main": "./bin/www",
   "dependencies": {
     "keystone": "~0.2.22",
     "async": "~0.9.0",
