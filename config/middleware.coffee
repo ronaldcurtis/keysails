@@ -4,12 +4,6 @@ app = keystone.app
 express = keystone.express
 path = require('path')
 
-initLocals = (req,res,next) ->
-	locals = res.locals
-	locals.navLinks = [label: 'Home', key: 'home', href: '/']
-	locals.user = req.user
-	next()
-
 flashMessages = (req,res,next) ->
 	flashMessages =
 		info: req.flash('info')
@@ -36,5 +30,5 @@ else
 	app.use('/assets', express.static(path.join(__dirname, "../.built")))
 
 module.exports = 
-	preRoutes: [initLocals]
+	preRoutes: []
 	preRender: [flashMessages]
