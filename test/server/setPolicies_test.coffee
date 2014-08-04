@@ -1,4 +1,5 @@
 setPolicies = require('../../server/setPolicies')
+sinon = require('sinon')
 describe "setPolicies:", ->
 
 	describe "When no policies are configured:", ->
@@ -305,8 +306,240 @@ describe "setPolicies:", ->
 			expect(returnedObj.PostController.secondAction[2]()).to.be('postController secondAction here')
 
 
+		describe "When * is a boolean in policy config:", ->
+
+			it "should add true policy as global default if if * is true for all controllers", ->
+				data =
+					config:
+						policies:
+							"*": true
+							PageController:
+								'*': 'thirdPolicy'
+								secondAction: 'secondPolicy'
+					policies:
+						firstPolicy: () -> return 'firstPolicy here!'
+						secondPolicy: () -> return 'secondPolicy here!'
+						thirdPolicy: () -> return 'thirdPolicy here!'
+					controllers:
+						PageController:
+							firstAction: () -> return 'firstAction here!'
+							secondAction: () -> return 'secondAction here!'
+							thirdAction: () -> return 'thirdAction here!'
+						PostController:
+							firstAction: () -> return 'postController firstAction here'
+							secondAction: () -> return 'postController secondAction here'
+
+				returnedObj = setPolicies(data)
+				expect(returnedObj.PageController.firstAction).to.be.an('array')
+				expect(returnedObj.PageController.firstAction.length).to.be(2)
+				expect(returnedObj.PageController.firstAction[0]()).to.be('thirdPolicy here!')
+				expect(returnedObj.PageController.firstAction[1]()).to.be('firstAction here!')
+
+				expect(returnedObj.PageController.secondAction).to.be.an('array')
+				expect(returnedObj.PageController.secondAction.length).to.be(2)
+				expect(returnedObj.PageController.secondAction[0]()).to.be('secondPolicy here!')
+				expect(returnedObj.PageController.secondAction[1]()).to.be('secondAction here!')
+
+				expect(returnedObj.PageController.thirdAction).to.be.an('array')
+				expect(returnedObj.PageController.thirdAction.length).to.be(2)
+				expect(returnedObj.PageController.thirdAction[0]()).to.be('thirdPolicy here!')
+				expect(returnedObj.PageController.thirdAction[1]()).to.be('thirdAction here!')
+
+				expect(returnedObj.PostController.firstAction).to.be.an('array')
+				expect(returnedObj.PostController.firstAction.length).to.be(2)
+				truePolicy = returnedObj.PostController.firstAction[0]
+				req = sinon.spy()
+				res = sinon.spy()
+				next = sinon.spy()
+				truePolicy(req,res,next)
+				expect(res.called).to.be(false)
+				expect(next.called).to.be(true)
+				expect(next.args[0].length).to.be(0)
+				expect(returnedObj.PostController.firstAction[1]()).to.be('postController firstAction here')
+
+				expect(returnedObj.PostController.secondAction).to.be.an('array')
+				expect(returnedObj.PostController.secondAction.length).to.be(2)
+				truePolicy = returnedObj.PostController.secondAction[0]
+				req = sinon.spy()
+				res = sinon.spy()
+				next = sinon.spy()
+				truePolicy(req,res,next)
+				expect(res.called).to.be(false)
+				expect(next.called).to.be(true)
+				expect(next.args[0].length).to.be(0)
+				expect(returnedObj.PostController.secondAction[1]()).to.be('postController secondAction here')
 
 
+			it "should add true policy as controller default if * is true for a specific controller", ->
+				data =
+					config:
+						policies:
+							PageController:
+								'*': true
+								secondAction: 'secondPolicy'
+					policies:
+						firstPolicy: () -> return 'firstPolicy here!'
+						secondPolicy: () -> return 'secondPolicy here!'
+						thirdPolicy: () -> return 'thirdPolicy here!'
+					controllers:
+						PageController:
+							firstAction: () -> return 'firstAction here!'
+							secondAction: () -> return 'secondAction here!'
+							thirdAction: () -> return 'thirdAction here!'
+
+				returnedObj = setPolicies(data)
+				expect(returnedObj.PageController.firstAction).to.be.an('array')
+				expect(returnedObj.PageController.firstAction.length).to.be(2)
+				truePolicy = returnedObj.PageController.firstAction[0]
+				req = sinon.spy()
+				res = sinon.spy()
+				next = sinon.spy()
+				truePolicy(req,res,next)
+				expect(res.called).to.be(false)
+				expect(next.called).to.be(true)
+				expect(next.args[0].length).to.be(0)
+				expect(returnedObj.PageController.firstAction[1]()).to.be('firstAction here!')
+
+				expect(returnedObj.PageController.secondAction).to.be.an('array')
+				expect(returnedObj.PageController.secondAction.length).to.be(2)
+				expect(returnedObj.PageController.secondAction[0]()).to.be('secondPolicy here!')
+				expect(returnedObj.PageController.secondAction[1]()).to.be('secondAction here!')
+
+				expect(returnedObj.PageController.thirdAction).to.be.an('array')
+				expect(returnedObj.PageController.thirdAction.length).to.be(2)
+				truePolicy = returnedObj.PageController.thirdAction[0]
+				req = sinon.spy()
+				res = sinon.spy()
+				next = sinon.spy()
+				truePolicy(req,res,next)
+				expect(res.called).to.be(false)
+				expect(next.called).to.be(true)
+				expect(next.args[0].length).to.be(0)
+				expect(returnedObj.PageController.thirdAction[1]()).to.be('thirdAction here!')
+
+			it "should add false policy as global default if if * is false for all controllers", ->
+				data =
+					config:
+						policies:
+							"*": false
+							PageController:
+								'*': 'thirdPolicy'
+								secondAction: 'secondPolicy'
+					policies:
+						firstPolicy: () -> return 'firstPolicy here!'
+						secondPolicy: () -> return 'secondPolicy here!'
+						thirdPolicy: () -> return 'thirdPolicy here!'
+					controllers:
+						PageController:
+							firstAction: () -> return 'firstAction here!'
+							secondAction: () -> return 'secondAction here!'
+							thirdAction: () -> return 'thirdAction here!'
+						PostController:
+							firstAction: () -> return 'postController firstAction here'
+							secondAction: () -> return 'postController secondAction here'
+
+				returnedObj = setPolicies(data)
+				expect(returnedObj.PageController.firstAction).to.be.an('array')
+				expect(returnedObj.PageController.firstAction.length).to.be(2)
+				expect(returnedObj.PageController.firstAction[0]()).to.be('thirdPolicy here!')
+				expect(returnedObj.PageController.firstAction[1]()).to.be('firstAction here!')
+
+				expect(returnedObj.PageController.secondAction).to.be.an('array')
+				expect(returnedObj.PageController.secondAction.length).to.be(2)
+				expect(returnedObj.PageController.secondAction[0]()).to.be('secondPolicy here!')
+				expect(returnedObj.PageController.secondAction[1]()).to.be('secondAction here!')
+
+				expect(returnedObj.PageController.thirdAction).to.be.an('array')
+				expect(returnedObj.PageController.thirdAction.length).to.be(2)
+				expect(returnedObj.PageController.thirdAction[0]()).to.be('thirdPolicy here!')
+				expect(returnedObj.PageController.thirdAction[1]()).to.be('thirdAction here!')
+
+				expect(returnedObj.PostController.firstAction).to.be.an('array')
+				expect(returnedObj.PostController.firstAction.length).to.be(2)
+				falsePolicy = returnedObj.PostController.firstAction[0]
+				req = sinon.spy()
+				res =
+					send: sinon.spy()
+				next = sinon.spy()
+				falsePolicy(req,res,next)
+				expect(req.called).to.be(false)
+				expect(res.send.called).to.be(true)
+				expect(next.called).to.be(false)
+				expect(res.send.args[0].length).to.be(2)
+				expect(res.send.args[0][0]).to.be(404)
+				expect(res.send.args[0][1]).to.be("Page not found")
+				expect(returnedObj.PostController.firstAction[1]()).to.be('postController firstAction here')
+
+				expect(returnedObj.PostController.secondAction).to.be.an('array')
+				expect(returnedObj.PostController.secondAction.length).to.be(2)
+				falsePolicy = returnedObj.PostController.secondAction[0]
+				req = sinon.spy()
+				res =
+					send: sinon.spy()
+				next = sinon.spy()
+				falsePolicy(req,res,next)
+				expect(req.called).to.be(false)
+				expect(res.send.called).to.be(true)
+				expect(next.called).to.be(false)
+				expect(res.send.args[0].length).to.be(2)
+				expect(res.send.args[0][0]).to.be(404)
+				expect(res.send.args[0][1]).to.be("Page not found")
+				expect(returnedObj.PostController.secondAction[1]()).to.be('postController secondAction here')
+
+			it "should add false policy as controller default if * is false for a specific controller", ->
+				data =
+					config:
+						policies:
+							PageController:
+								'*': false
+								secondAction: 'secondPolicy'
+					policies:
+						firstPolicy: () -> return 'firstPolicy here!'
+						secondPolicy: () -> return 'secondPolicy here!'
+						thirdPolicy: () -> return 'thirdPolicy here!'
+					controllers:
+						PageController:
+							firstAction: () -> return 'firstAction here!'
+							secondAction: () -> return 'secondAction here!'
+							thirdAction: () -> return 'thirdAction here!'
+
+				returnedObj = setPolicies(data)
+				expect(returnedObj.PageController.firstAction).to.be.an('array')
+				expect(returnedObj.PageController.firstAction.length).to.be(2)
+				falsePolicy = returnedObj.PageController.firstAction[0]
+				req = sinon.spy()
+				res =
+					send: sinon.spy()
+				next = sinon.spy()
+				falsePolicy(req,res,next)
+				expect(req.called).to.be(false)
+				expect(res.send.called).to.be(true)
+				expect(next.called).to.be(false)
+				expect(res.send.args[0].length).to.be(2)
+				expect(res.send.args[0][0]).to.be(404)
+				expect(res.send.args[0][1]).to.be("Page not found")
+				expect(returnedObj.PageController.firstAction[1]()).to.be('firstAction here!')
+
+				expect(returnedObj.PageController.secondAction).to.be.an('array')
+				expect(returnedObj.PageController.secondAction.length).to.be(2)
+				expect(returnedObj.PageController.secondAction[0]()).to.be('secondPolicy here!')
+				expect(returnedObj.PageController.secondAction[1]()).to.be('secondAction here!')
+
+				expect(returnedObj.PageController.thirdAction).to.be.an('array')
+				expect(returnedObj.PageController.thirdAction.length).to.be(2)
+				falsePolicy = returnedObj.PageController.thirdAction[0]
+				req = sinon.spy()
+				res =
+					send: sinon.spy()
+				next = sinon.spy()
+				falsePolicy(req,res,next)
+				expect(req.called).to.be(false)
+				expect(res.send.called).to.be(true)
+				expect(next.called).to.be(false)
+				expect(res.send.args[0].length).to.be(2)
+				expect(res.send.args[0][0]).to.be(404)
+				expect(res.send.args[0][1]).to.be("Page not found")
+				expect(returnedObj.PageController.thirdAction[1]()).to.be('thirdAction here!')
 
 
 
