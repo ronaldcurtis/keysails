@@ -459,15 +459,12 @@ describe "setPolicies:", ->
 				falsePolicy = returnedObj.PostController.firstAction[0]
 				req = sinon.spy()
 				res =
-					send: sinon.spy()
+					notFound: sinon.spy()
 				next = sinon.spy()
 				falsePolicy(req,res,next)
 				expect(req.called).to.be(false)
-				expect(res.send.called).to.be(true)
+				expect(res.notFound.called).to.be(true)
 				expect(next.called).to.be(false)
-				expect(res.send.args[0].length).to.be(2)
-				expect(res.send.args[0][0]).to.be(404)
-				expect(res.send.args[0][1]).to.be("Page not found")
 				expect(returnedObj.PostController.firstAction[1]()).to.be('postController firstAction here')
 
 				expect(returnedObj.PostController.secondAction).to.be.an('array')
@@ -475,15 +472,12 @@ describe "setPolicies:", ->
 				falsePolicy = returnedObj.PostController.secondAction[0]
 				req = sinon.spy()
 				res =
-					send: sinon.spy()
+					notFound: sinon.spy()
 				next = sinon.spy()
 				falsePolicy(req,res,next)
 				expect(req.called).to.be(false)
-				expect(res.send.called).to.be(true)
+				expect(res.notFound.called).to.be(true)
 				expect(next.called).to.be(false)
-				expect(res.send.args[0].length).to.be(2)
-				expect(res.send.args[0][0]).to.be(404)
-				expect(res.send.args[0][1]).to.be("Page not found")
 				expect(returnedObj.PostController.secondAction[1]()).to.be('postController secondAction here')
 
 			it "should add false policy as controller default if * is false for a specific controller", ->
@@ -509,15 +503,12 @@ describe "setPolicies:", ->
 				falsePolicy = returnedObj.PageController.firstAction[0]
 				req = sinon.spy()
 				res =
-					send: sinon.spy()
+					notFound: sinon.spy()
 				next = sinon.spy()
 				falsePolicy(req,res,next)
 				expect(req.called).to.be(false)
-				expect(res.send.called).to.be(true)
+				expect(res.notFound.called).to.be(true)
 				expect(next.called).to.be(false)
-				expect(res.send.args[0].length).to.be(2)
-				expect(res.send.args[0][0]).to.be(404)
-				expect(res.send.args[0][1]).to.be("Page not found")
 				expect(returnedObj.PageController.firstAction[1]()).to.be('firstAction here!')
 
 				expect(returnedObj.PageController.secondAction).to.be.an('array')
@@ -530,15 +521,12 @@ describe "setPolicies:", ->
 				falsePolicy = returnedObj.PageController.thirdAction[0]
 				req = sinon.spy()
 				res =
-					send: sinon.spy()
+					notFound: sinon.spy()
 				next = sinon.spy()
 				falsePolicy(req,res,next)
 				expect(req.called).to.be(false)
-				expect(res.send.called).to.be(true)
+				expect(res.notFound.called).to.be(true)
 				expect(next.called).to.be(false)
-				expect(res.send.args[0].length).to.be(2)
-				expect(res.send.args[0][0]).to.be(404)
-				expect(res.send.args[0][1]).to.be("Page not found")
 				expect(returnedObj.PageController.thirdAction[1]()).to.be('thirdAction here!')
 
 

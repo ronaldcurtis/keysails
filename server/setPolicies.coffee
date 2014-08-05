@@ -24,7 +24,7 @@ module.exports = (data) ->
 	# False Policy
 	# Policy when * is false in config.policies
 	falsePolicy = (req,res) ->
-		res.send(404, "Page not found")
+		res.notFound()
 
 	# Adds functions to the front of the controller action
 	addPolicies = (controller, action, fns) ->
