@@ -11,7 +11,6 @@ keystone.init
 	'name': 'keysails'
 	'brand': 'keysails'
 
-	'less': 'public'
 	'static': 'public'
 	'favicon': 'public/favicon.ico'
 	'views': 'templates/views'
