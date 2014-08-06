@@ -17,6 +17,7 @@ keystone.init
 	'views': 'templates/views'
 	'view engine': 'jade'
 	'port': process.env.PORT || 3000
+	'mongo': process.env.MONGO_URI || "mongodb://localhost/keysails"
 	
 	'auto update': true
 	'session': true
