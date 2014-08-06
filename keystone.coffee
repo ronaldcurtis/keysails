@@ -20,6 +20,7 @@ keystone.init
 	
 	'auto update': true
 	'session': true
+	'session store': 'mongo'
 	'auth': true
 	'user model': 'User'
 	'cookie secret': 'g!9u07f$~,*"T^E}vn5Nfr6Q*/wO^TMf*^O7g>F)[{]nm@A2HW5qa^2`W`d+Lr`)'
