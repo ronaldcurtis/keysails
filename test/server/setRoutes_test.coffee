@@ -26,23 +26,6 @@ describe "setRoutes:", ->
 			expect(app.delete.called).to.be(false)
 
 	describe "When routes have been set", ->
-		data = 
-			app: {}
-			config:
-				routes:
-					"get /": "PageController.action1"
-			policiesAndControllers: {}
-
-
-		it "should throw an error if controller is not defined", ->
-			expect(setRoutes).withArgs(data).to.throwError (e) ->
-				expect(e.message).to.contain('PageController does not exist')
-
-		it "should throw an error if controller action is not defined", ->
-			data.policiesAndControllers.PageController =
-				action2: ->
-			expect(setRoutes).withArgs(data).to.throwError (e) ->
-				expect(e.message).to.contain('PageController.action1 does not exist')
 
 		it "should be able to set get, post, put, and delete routes", ->
 			data = 
@@ -93,6 +76,114 @@ describe "setRoutes:", ->
 			expect(data.app.get.called)
 			expect(data.app.get.args[0][0]).to.be('/getpath')
 			expect(data.app.get.args[0][1]).to.be(data.policiesAndControllers.PageController.action1)
+
+		it "should throw an error if controller is not defined", ->
+			data = 
+				app: {}
+				config:
+					routes:
+						"get /": "PageController.action1"
+				policiesAndControllers: {}
+
+			expect(setRoutes).withArgs(data).to.throwError (e) ->
+				expect(e.message).to.contain('PageController does not exist')
+
+		it "should throw an error if controller action is not defined", ->
+
+			data = 
+				app: {}
+				config:
+					routes:
+						"get /": "PageController.action1"
+				policiesAndControllers:
+					PageController:
+						action2: ->
+
+			expect(setRoutes).withArgs(data).to.throwError (e) ->
+				expect(e.message).to.contain('PageController.action1 does not exist')
+
+		it "should throw an error if route is not a string", ->
+
+			data = 
+				app: {}
+				config:
+					routes:
+						"get /": []
+				policiesAndControllers:
+					PageController:
+						action2: ->
+
+			expect(setRoutes).withArgs(data).to.throwError (e) ->
+				expect(e.message).to.contain('should be a string')
+
+	describe "When static routes have been set", ->
+
+		it "should create static controller for each route", ->
+
+			render = sinon.spy()
+
+			data = 
+				app:
+					all: sinon.spy()
+				keystone:
+					View: sinon.stub().returns({render: render})
+				config:
+					routes:
+						staticRoutes:
+							"/": "index"
+							"/page": "page"
+				policiesAndControllers: {}
+
+			req = sinon.spy()
+			res =
+				render: sinon.spy()
+
+			setRoutes(data)
+			expect(data.app.all.called)
+			expect(data.app.all.args[0][0]).to.be('/')
+			expect(data.app.all.args[0][1]).to.be.a('function')
+			staticController = data.app.all.args[0][1]
+			staticController(req,res)
+			expect(render.called).to.be(true)
+			expect(render.args[0][0]).to.be("index")
+
+			expect(data.app.all.args[1][0]).to.be('/page')
+			expect(data.app.all.args[1][1]).to.be.a('function')
+			staticController = data.app.all.args[1][1]
+			staticController(req,res)
+			expect(render.called).to.be(true)
+			expect(render.args[1][0]).to.be("page")
+
+
+		it "should throw error if staticRoutes is not an object", ->
+
+			data = 
+				app:
+					all: sinon.spy()
+				config:
+					routes:
+						staticRoutes: ->
+				policiesAndControllers: {}
+
+			expect(setRoutes).withArgs(data).to.throwError (e) ->
+				expect(e.message).to.contain('should be an object')
+
+		it "should throw error if a staticRoute definition is not a string", ->
+
+			data = 
+				app:
+					all: sinon.spy()
+				config:
+					routes:
+						staticRoutes:
+							"/": ->
+				policiesAndControllers: {}
+
+			expect(setRoutes).withArgs(data).to.throwError (e) ->
+				expect(e.message).to.contain('should be a string')
+
+
+
 
 
 

@@ -1,2 +1,3 @@
 module.exports =
-  "get /": "HomeController.showHome"
+  staticRoutes:
+  	"/": "index"
