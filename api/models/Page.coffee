@@ -40,4 +40,4 @@ Page.schema.virtual('content.full').get () ->
 Page.register()
 
 module.exports =
-  rest: true
+  rest: false

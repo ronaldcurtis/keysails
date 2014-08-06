@@ -2,7 +2,7 @@
 keystone = require('keystone')
 
 module.exports =
-  enabled: true
+  enabled: false
   prefix: '/api/v1'
 
   crud: (modelName) ->
