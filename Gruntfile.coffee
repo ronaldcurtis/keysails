@@ -15,6 +15,7 @@ module.exports = (grunt) ->
 			test:
 				options:
 					reporter: 'spec'
+					timeout: 5000
 					require: [
 						'coffee-script/register'
 						() ->
